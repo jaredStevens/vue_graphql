@@ -1,7 +1,28 @@
 <template>
-  <v-app>
+  <v-app style="background: #E3E3EE">
+    <v-navigation-drawer app temporary absolute v-model="sideNav">
+      <v-app-bar color="accent" dark flat>
+        <v-app-bar-nav-icon @click="toggleSideNav">
+        </v-app-bar-nav-icon>
+        <router-link to="/" tag="span" style="cursor: pointer">
+          <h1 class="title pl-3">VueShare</h1>
+        </router-link>
+      </v-app-bar>
+      <v-divider/>
+      <!-- Side NavBar Links -->
+      <v-list>
+      <v-list-item v-for="item in sideNavItems" :key="item.title" :to="item.link">
+        <v-list-item-action>
+          <v-icon>{{item.icon}}</v-icon>
+        </v-list-item-action>
+        <v-list-item-content>
+          {{item.title}}
+        </v-list-item-content>
+      </v-list-item>
+      </v-list>
+    </v-navigation-drawer>
     <v-app-bar fixed app color="primary" dark>
-      <v-app-bar-nav-icon></v-app-bar-nav-icon>
+      <v-app-bar-nav-icon @click="toggleSideNav"></v-app-bar-nav-icon>
       <v-toolbar-title class="headline hidden-xs-only">
         <router-link to="/" tag="span" style="cursor: pointer">
         VueShare
@@ -21,7 +42,9 @@
     </v-app-bar>
     <main>
       <v-container style="margin-top: 50px">
+        <transition name="fade">
       <router-view/>
+      </transition>
       </v-container>
     </main>
   </v-app>
@@ -35,14 +58,47 @@ export default {
   components: {
     Home
   },
+  data () {
+    return {
+      sideNav: false,
+    }
+  },
+  methods: {
+    toggleSideNav() {
+      this.sideNav = !this.sideNav
+    }
+  },
   computed: {
     horizontalNavItems(){
       return [
         {icon: 'mdi mdi-chat', title: 'Posts', link: '/posts'},
-        {icon: 'mdi mdi-home-lock-open', title: 'Sign In', link: '/signin'},
+        {icon: 'mdi mdi-lock-open', title: 'Sign In', link: '/signin'},
+        {icon: 'mdi mdi-login', title: 'Sign Up', link: '/signup'},
+      ]
+    },
+    sideNavItems(){
+      return [
+        {icon: 'mdi mdi-chat', title: 'Posts', link: '/posts'},
+        {icon: 'mdi mdi-lock-open', title: 'Sign In', link: '/signin'},
         {icon: 'mdi mdi-login', title: 'Sign Up', link: '/signup'},
       ]
     }
   },
 };
 </script>
+
+<style scoped>
+.fade-enter-active,
+.fade-leave-active {
+  transition-property: opacity;
+  transition-duration: 0.25s;
+}
+.fade-enter-active {
+  transition-delay: 0.25s;
+}
+
+.fade-enter,
+.fade-leave-active {
+  opacity: 0;
+}
+</style>
