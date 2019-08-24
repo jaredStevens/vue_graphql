@@ -36,7 +36,6 @@ import Vuetify, {
   VListItemTitle,
   VTooltip,
   VToolbar,
-  VToolbarSideIcon,
   VToolbarTitle,
   VToolbarItems,
   VSpacer,
@@ -68,7 +67,6 @@ import Vuetify, {
   VBreadcrumbs,
   VRadioGroup,
   VRadio,
-  VBottomNav
 } from 'vuetify/lib'
 
 Vue.use(Vuetify, {
@@ -116,7 +114,6 @@ Vue.use(Vuetify, {
     VIcon,
     VTooltip,
     VToolbar,
-    VToolbarSideIcon,
     VToolbarTitle,
     VToolbarItems,
     VSpacer,
@@ -149,7 +146,6 @@ Vue.use(Vuetify, {
     VBreadcrumbs,
     VRadioGroup,
     VRadio,
-    VBottomNav
   }
 });
 

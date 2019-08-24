@@ -4,7 +4,6 @@ import router from './router'
 import store from './store'
 import vuetify from './plugins/vuetify'
 import 'vue-material-design-icons/styles.css'
-
 import ApolloClient from 'apollo-boost';
 import VueApollo from 'vue-apollo';
 
@@ -19,7 +18,7 @@ const apolloProvider = new VueApollo({ defaultClient });
 Vue.config.productionTip = false
 
 new Vue({
-  provide: apolloProvider.provide(),
+  apolloProvider,
   router,
   store,
   vuetify,
