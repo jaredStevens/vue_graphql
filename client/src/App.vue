@@ -1,7 +1,7 @@
 <template>
   <v-app style="background: #E3E3EE">
     <v-navigation-drawer app temporary absolute v-model="sideNav">
-      <v-app-bar color="accent" dark flat>
+      <v-app-bar color="secondary" dark flat>
         <v-app-bar-nav-icon @click="toggleSideNav">
         </v-app-bar-nav-icon>
         <router-link to="/" tag="span" style="cursor: pointer">
@@ -71,16 +71,16 @@ export default {
   computed: {
     horizontalNavItems(){
       return [
-        {icon: 'mdi mdi-chat', title: 'Posts', link: '/posts'},
-        {icon: 'mdi mdi-lock-open', title: 'Sign In', link: '/signin'},
-        {icon: 'mdi mdi-login', title: 'Sign Up', link: '/signup'},
+        {icon: 'chat', title: 'Posts', link: '/posts'},
+        {icon: 'lock_open', title: 'Sign In', link: '/signin'},
+        {icon: 'create', title: 'Sign Up', link: '/signup'},
       ]
     },
     sideNavItems(){
       return [
-        {icon: 'mdi mdi-chat', title: 'Posts', link: '/posts'},
-        {icon: 'mdi mdi-lock-open', title: 'Sign In', link: '/signin'},
-        {icon: 'mdi mdi-login', title: 'Sign Up', link: '/signup'},
+        {icon: 'chat', title: 'Posts', link: '/posts'},
+        {icon: 'lock_open', title: 'Sign In', link: '/signin'},
+        {icon: 'create', title: 'Sign Up', link: '/signup'},
       ]
     }
   },

@@ -3,7 +3,6 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 import vuetify from './plugins/vuetify'
-import 'vue-material-design-icons/styles.css'
 import ApolloClient from 'apollo-boost';
 import VueApollo from 'vue-apollo';
 
