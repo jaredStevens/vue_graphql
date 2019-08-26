@@ -4,7 +4,7 @@
     <!--Signup Title -->
     <v-layout row wrap>
       <v-flex xs12 sm6 offset-3>
-        <h1>Getting Started Here</h1>
+        <h1>Get Started Here</h1>
       </v-flex>
     </v-layout>
 
