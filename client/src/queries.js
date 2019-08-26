@@ -1,7 +1,6 @@
 import { gql } from 'apollo-boost'
 
 /* Post Queries */
-
 export const GET_POSTS = gql`
   query {
     getPosts {
@@ -13,6 +12,23 @@ export const GET_POSTS = gql`
 `
 
 /*User Queries*/
+export const GET_CURRENT_USER = gql `
+  query {
+    getCurrentUser {
+      _id
+      username
+      email
+      password
+      avatar
+      joinDate
+      favorites {
+        _id
+        title
+        imageUrl
+      }
+    }
+  }
+`
 
 /*Post Mutations*/
 

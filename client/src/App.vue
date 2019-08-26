@@ -11,12 +11,21 @@
       <v-divider/>
       <!-- Side NavBar Links -->
       <v-list>
-      <v-list-item v-for="item in sideNavItems" :key="item.title" :to="item.link">
+      <v-list-item ripple v-for="item in sideNavItems" :key="item.title" :to="item.link">
         <v-list-item-action>
           <v-icon>{{item.icon}}</v-icon>
         </v-list-item-action>
         <v-list-item-content>
           {{item.title}}
+        </v-list-item-content>
+      </v-list-item>
+      <!-- Signout Button -->
+      <v-list-item v-if="user" @click="handleSignoutUser">
+        <v-list-item-action>
+          <v-icon>exit_to_app</v-icon>
+        </v-list-item-action>
+        <v-list-item-content>
+          Signout
         </v-list-item-content>
       </v-list-item>
       </v-list>
@@ -38,6 +47,19 @@
           <v-icon left class="hidden-sm-only">{{item.icon}}</v-icon>
           {{item.title}}
         </v-btn>
+        <!-- Profile Button -->
+        <v-btn text to="/profile" v-if="user">
+        <v-icon class="hidden-sm-only" left>account_box</v-icon>
+        <v-badge right color="blue darken-2">
+          <!-- <span slot="badge">1</span> -->
+          Profile
+        </v-badge>
+        </v-btn>
+        <!-- Signout Button -->
+        <v-btn text v-if="user" @click="handleSignoutUser">
+          <v-icon class="hidden-sm-only" left>exit_to_app</v-icon>
+          Signout
+        </v-btn>
       </v-toolbar-items>
     </v-app-bar>
     <main>
@@ -52,6 +74,7 @@
 
 <script>
 import Home from './components/Home';
+import {mapGetters} from 'vuex'
 
 export default {
   name: 'App',
@@ -66,22 +89,40 @@ export default {
   methods: {
     toggleSideNav() {
       this.sideNav = !this.sideNav
+    },
+    handleSignoutUser(){
+      this.$store.dispatch('signoutUser')
     }
   },
   computed: {
+    ...mapGetters(['user']),
     horizontalNavItems(){
-      return [
+      let items = [
         {icon: 'chat', title: 'Posts', link: '/posts'},
         {icon: 'lock_open', title: 'Sign In', link: '/signin'},
         {icon: 'create', title: 'Sign Up', link: '/signup'},
-      ]
+      ];
+      if(this.user) {
+        items = [
+          {icon: 'chat', title: 'Posts', link: '/posts'}
+        ]
+      }
+      return items
     },
     sideNavItems(){
-      return [
+      let items = [
         {icon: 'chat', title: 'Posts', link: '/posts'},
         {icon: 'lock_open', title: 'Sign In', link: '/signin'},
         {icon: 'create', title: 'Sign Up', link: '/signup'},
-      ]
+      ];
+      if(this.user) {
+        items = [
+          {icon: 'chat', title: 'Posts', link: '/posts'},
+          {icon: 'star', title: 'Create Post', link: '/post/add'},
+          {icon: 'account_box', title: 'Profile', link: '/profile'}
+        ]
+      }
+      return items
     }
   },
 };

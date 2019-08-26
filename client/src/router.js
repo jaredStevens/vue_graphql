@@ -32,7 +32,7 @@ export default new Router({
     {
       path: '/profile',
       name: 'Profile',
-      component: Home
+      component: Profile
     },
     {
       path: '/signin',
