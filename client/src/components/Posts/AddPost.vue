@@ -39,7 +39,7 @@
           <!-- Categories Select -->
           <v-layout row>
             <v-flex xs12>
-              <v-select :rules="categoriesRules" required v-model="categories" :items="['Art', 'Education', 'Travel', 'Photography', 'Technology', 'Furniture']" multiple label="Categories"></v-select>
+              <v-select :rules="categoriesRules" required v-model="categories" :items="['Art', 'Education', 'Travel', 'Photography', 'Technology', 'Food', 'Furniture']" multiple label="Categories"></v-select>
             </v-flex>
           </v-layout>
 
@@ -84,6 +84,7 @@ export default {
           description: this.description,
           creatorId: this.user._id
         })
+        this.$router.push('/');
       }
     }
   },

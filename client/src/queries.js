@@ -51,7 +51,8 @@ mutation(
     imageUrl
     categories
     description
-    createdDate
+    # Optimistic reponse adds post immediately, so you don't need createdDate
+    # createdDate
   }
 }
 `
