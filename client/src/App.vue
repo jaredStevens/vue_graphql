@@ -9,6 +9,7 @@
         </router-link>
       </v-app-bar>
       <v-divider/>
+
       <!-- Side NavBar Links -->
       <v-list>
       <v-list-item ripple v-for="item in sideNavItems" :key="item.title" :to="item.link">
@@ -38,15 +39,18 @@
         </router-link>
       </v-toolbar-title>
       <v-spacer/>
+
       <!--Search Input -->
       <v-text-field flex prepend-icon="mdi-magnify" placeholder="Search Posts" color="accent" single-line hide-details>Search Posts</v-text-field>
       <v-spacer/>
+
       <!--Horizontal Navbar Links-->
       <v-toolbar-items class="hidden-xs-only">
         <v-btn text v-for="item in horizontalNavItems" :key="item.title" :to="item.link">
           <v-icon left class="hidden-sm-only">{{item.icon}}</v-icon>
           {{item.title}}
         </v-btn>
+
         <!-- Profile Button -->
         <v-btn text to="/profile" v-if="user">
         <v-icon class="hidden-sm-only" left>account_box</v-icon>
@@ -55,6 +59,7 @@
           Profile
         </v-badge>
         </v-btn>
+
         <!-- Signout Button -->
         <v-btn text v-if="user" @click="handleSignoutUser">
           <v-icon class="hidden-sm-only" left>exit_to_app</v-icon>

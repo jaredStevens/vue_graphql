@@ -1,10 +1,10 @@
 <template>
-  <v-container text-xs-center v-if="infiniteScrollPosts">
-    <div v-for="post in infiniteScrollPosts.posts" :key="post._id">
-      <img :src="post.imageUrl" height="100px"/>
-      <h3>{{post.title}}</h3>
-    </div>
-    <v-btn @click="showMorePosts" v-if="showMoreEnabled">Fetch More</v-btn>
+  <v-container pt-5 mt-5 style="text-align: center;" v-if="infiniteScrollPosts">
+      <div v-for="post in infiniteScrollPosts.posts" :key="post._id">
+        <img :src="post.imageUrl" height="100px"/>
+        <h3>{{post.title}}</h3>
+      </div>
+    <v-btn color="secondary" @click="showMorePosts" v-if="showMoreEnabled">Fetch More</v-btn>
   </v-container>
 </template>
 

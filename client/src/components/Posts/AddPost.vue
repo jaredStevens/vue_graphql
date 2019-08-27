@@ -1,5 +1,5 @@
 <template>
-  <v-container  pt-5 mt-5 style="text-align: center;">
+  <v-container pt-5 mt-5 style="text-align: center;">
 
     <!--Add Post Title -->
     <v-layout row wrap>
