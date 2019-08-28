@@ -111,7 +111,7 @@ module.exports = {
       //Return only likes from 'post' and favorites from 'user'
       return { likes: post.likes, favorites: user.favorites }
     },
-    unlikePost: async (_, { username, password }, { Post, User }) => {
+    unlikePost: async (_, { postId, username }, { Post, User }) => {
       //Find Post, add -1 to it's likes field
       const post = await Post.findOneAndUpdate(
         { _id: postId },
