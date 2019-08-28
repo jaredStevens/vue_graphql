@@ -2,14 +2,14 @@ const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 
 const createToken = (user, secret, expiresIn) => {
-  const {username, email} = user
-  return jwt.sign({username, email}, secret, {expiresIn});
+  const { username, email } = user
+  return jwt.sign({ username, email }, secret, { expiresIn });
 }
 
 module.exports = {
   Query: {
-    getPosts: async (_, args, {Post}) => {
-      const posts = await Post.find({}).sort({createdDate: 'desc'}).populate({
+    getPosts: async (_, args, { Post }) => {
+      const posts = await Post.find({}).sort({ createdDate: 'desc' }).populate({
         path: 'createdBy',
         model: 'User'
       });
@@ -23,7 +23,7 @@ module.exports = {
       return post
     },
     getCurrentUser: async (_, args, { User, currentUser }) => {
-      if(!currentUser) {
+      if (!currentUser) {
         return null
       }
       const user = await User.findOne({ username: currentUser.username }).populate({
@@ -74,20 +74,76 @@ module.exports = {
       }).save();
       return newPost;
     },
-    signinUser: async (_, {username, password}, {User}) => {
-      const user = await User.findOne({username});
-      if(!user) {
+    addPostMessage: async (_, { messageBody, userId, postId }, { Post }) => {
+      const newMessage = {
+        messageBody,
+        messageUser: userId,
+      }
+      const post = await Post.findOneAndUpdate(
+        //find post by id
+        { _id: postId },
+        // prepend new message to beginning of messages array
+        { $push: { messages: { $each: [newMessage], $position: 0 } } },
+        //return fresh document update
+        { new: true }
+      ).populate({
+        path: 'messages.messageUser',
+        model: 'User'
+      })
+      return post.messages[0]
+    },
+    likePost: async (_, { postId, username }, { Post, User }) => {
+      //Find Post, add 1 to it's likes field
+      const post = await Post.findOneAndUpdate(
+        { _id: postId },
+        { $inc: { likes: 1 } },
+        { new: true }
+      );
+      //Find User, add id of post to its favorites array (which will be populated as Posts)
+      const user = await User.findOneAndUpdate(
+        { username },
+        { $addToSet: { favorites: postId } },
+        { new: true }
+      ).populate({
+        path: 'favorites',
+        model: 'Post'
+      })
+      //Return only likes from 'post' and favorites from 'user'
+      return { likes: post.likes, favorites: user.favorites }
+    },
+    unlikePost: async (_, { username, password }, { Post, User }) => {
+      //Find Post, add -1 to it's likes field
+      const post = await Post.findOneAndUpdate(
+        { _id: postId },
+        { $inc: { likes: -1 } },
+        { new: true }
+      );
+      //Find User, remove id of post from its favorites array (which will be populated as Posts)
+      const user = await User.findOneAndUpdate(
+        { username },
+        { $pull: { favorites: postId } },
+        { new: true }
+      ).populate({
+        path: 'favorites',
+        model: 'Post'
+      })
+      //Return only likes from 'post' and favorites from 'user'
+      return { likes: post.likes, favorites: user.favorites }
+    },
+    signinUser: async (_, { username, password }, { User }) => {
+      const user = await User.findOne({ username });
+      if (!user) {
         throw new Error('User Not Found');
       }
       const isValidPassword = await bcrypt.compare(password, user.password);
-      if(!isValidPassword) {
+      if (!isValidPassword) {
         throw new Error('Invalid Password')
       }
-      return {token: createToken(user, process.env.SECRET, '1hr')}
+      return { token: createToken(user, process.env.SECRET, '1hr') }
     },
-    signupUser: async (_, {username, email, password}, {User}) => {
-      const user = await User.findOne({username});
-      if(user) {
+    signupUser: async (_, { username, email, password }, { User }) => {
+      const user = await User.findOne({ username });
+      if (user) {
         throw new Error('User Already Exists')
       }
       const newUser = await new User({

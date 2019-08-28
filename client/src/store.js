@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import router from './router'
 
-import  { defaultClient as apolloClient } from './main'
+import { defaultClient as apolloClient } from './main'
 
 import { GET_POSTS, SIGNIN_USER, SIGNUP_USER, GET_CURRENT_USER, ADD_POST } from './queries'
 
@@ -36,60 +36,60 @@ export default new Vuex.Store({
     }
   },
   actions: {
-    addPost: ({commit }, payload) => {
+    addPost: ({ commit }, payload) => {
       apolloClient
-      .mutate({
-        mutation: ADD_POST,
-        variables: payload,
-        update: (cache,  {data: {addPost} }) => {
-          // First read the query you want to update
-          const data = cache.readQuery({query: GET_POSTS});
-          //Create update data
-          data.getPosts.unshift(addPost)
-          //write updated data back to the query
-          console.log(data)
-          cache.writeQuery({
-            query: GET_POSTS,
-            data
-          })
-        },
-        //optimistic response ensures data is added immediately as we specified for the udpate function
-        optimisticResponse: {
-          __typename: 'Mutation',
-          addPost: {
-            __typename: 'Post',
-            //to ensure no conflict and that it is added to the beginning of the array, id value of -1
-            _id: -1,
-            ...payload
+        .mutate({
+          mutation: ADD_POST,
+          variables: payload,
+          update: (cache, { data: { addPost } }) => {
+            // First read the query you want to update
+            const data = cache.readQuery({ query: GET_POSTS });
+            //Create update data
+            data.getPosts.unshift(addPost)
+            //write updated data back to the query
+            console.log(data)
+            cache.writeQuery({
+              query: GET_POSTS,
+              data
+            })
+          },
+          //optimistic response ensures data is added immediately as we specified for the udpate function
+          optimisticResponse: {
+            __typename: 'Mutation',
+            addPost: {
+              __typename: 'Post',
+              //to ensure no conflict and that it is added to the beginning of the array, id value of -1
+              _id: -1,
+              ...payload
+            }
           }
-        }
-      })
-      .then(({data}) => {
-        console.log(data.addPost)
-      })
-      .catch(err => {
-        console.error(err)
-      })
+        })
+        .then(({ data }) => {
+          console.log(data.addPost)
+        })
+        .catch(err => {
+          console.error(err)
+        })
     },
     getCurrentUser: ({ commit }) => {
       commit('setLoading', true)
       apolloClient.query({
         query: GET_CURRENT_USER
       })
-      .then(({ data }) => {
-        commit('setLoading', false)
-        //Add user data to state
-        commit('setUser', data.getCurrentUser)
-        console.log(data.getCurrentUser)
-      })
-      .catch(err => {
-        commit('setLoading', false)
-        console.error(err)
-      })
+        .then(({ data }) => {
+          commit('setLoading', false)
+          //Add user data to state
+          commit('setUser', data.getCurrentUser)
+          console.log(data.getCurrentUser)
+        })
+        .catch(err => {
+          commit('setLoading', false)
+          console.error(err)
+        })
     },
-    getPosts: ({ commit }) =>{
+    getPosts: ({ commit }) => {
       commit('setLoading', true)
-    //use apollo client to fire getPosts query
+      //use apollo client to fire getPosts query
       apolloClient
         .query({
           query: GET_POSTS
@@ -105,25 +105,25 @@ export default new Vuex.Store({
           console.log(err)
         })
     },
-    signinUser: ({commit}, payload) => {
+    signinUser: ({ commit }, payload) => {
       commit('clearError')
       commit('setLoading', true)
       apolloClient
-      .mutate({
-        mutation: SIGNIN_USER,
-        variables: payload
-      })
-      .then(({ data }) => {
-        commit('setLoading', false)
-        localStorage.setItem('token', data.signinUser.token);
-        //to make sure created method is run in main.js(we run getCurrentUser), reload the page
-        router.go();
-      })
-      .catch(err =>{
-        commit('setLoading', false)
-        commit('setError', err)
-        console.error(err)
-      })
+        .mutate({
+          mutation: SIGNIN_USER,
+          variables: payload
+        })
+        .then(({ data }) => {
+          commit('setLoading', false)
+          localStorage.setItem('token', data.signinUser.token);
+          //to make sure created method is run in main.js(we run getCurrentUser), reload the page
+          router.go();
+        })
+        .catch(err => {
+          commit('setLoading', false)
+          commit('setError', err)
+          console.error(err)
+        })
     },
     signupUser: ({ commit }, payload) => {
       commit('clearError')

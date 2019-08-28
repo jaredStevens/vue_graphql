@@ -11,7 +11,7 @@ const typeDefs = fs.readFileSync(filePath, 'utf-8')
 const resolvers = require('./resolvers')
 
 //import Environment Variables and Mongoose Models
-require('dotenv').config({path: 'variables.env'});
+require('dotenv').config({ path: 'variables.env' });
 const User = require('./models/User')
 const Post = require('./models/Post')
 
@@ -23,10 +23,10 @@ mongoose
 
 //Verify JWT Token passed from client
 const getUser = async token => {
-  if(token) {
+  if (token) {
     try {
       return await jwt.verify(token, process.env.SECRET)
-    } catch(err) {
+    } catch (err) {
       throw new AuthenticationError(
         "Your session has ended.  Please sign in again."
       );
@@ -48,6 +48,6 @@ const server = new ApolloServer({
 });
 
 //Listening on port -- port server is run
-server.listen(3000).then(({url}) => {
+server.listen(3000).then(({ url }) => {
   console.log(`Server Listening on ${url}`)
 });

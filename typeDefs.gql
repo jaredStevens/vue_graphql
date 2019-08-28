@@ -35,6 +35,11 @@ type PostsPage {
   posts: [Post]
   hasMore: Boolean
 }
+#likes for post / "Favorites are for Users
+type LikesFaves {
+  likes: Int
+  favorites: [Post]
+}
 
 type Query {
   getCurrentUser: User
@@ -51,6 +56,9 @@ type Mutation {
     description: String!
     creatorId: ID!
   ): Post!
-  signinUser(username: String!, password: String!): Token!
+  addPostMessage(messageBody: String!, userId: ID!, postId: ID!): Message!
+  likePost(postId: ID!, username: String!): LikesFaves!
+  unlikePost(postId: ID!, username: String!): LikesFaves!
+  signinUser(username: String!, password: String!): Token
   signupUser(username: String!, email: String!, password: String!): Token
 }
