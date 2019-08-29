@@ -17,7 +17,7 @@ const Post = require('./models/Post')
 
 //connect to MLAB database
 mongoose
-  .connect(process.env.MONGO_URI, { useNewUrlParser: true })
+  .connect(process.env.MONGO_URI, { useNewUrlParser: true, useFindAndModify: false, useCreateIndex: true })
   .then(() => console.log("DB Connected"))
   .catch(err => console.error(err))
 
@@ -33,6 +33,7 @@ const getUser = async token => {
     }
   }
 }
+
 //Creating Apollo/GraphQl Server using typeDefs, resolvers, and context object
 const server = new ApolloServer({
   typeDefs,
