@@ -6,14 +6,14 @@
         <v-card hover>
           <v-card-title>
             <h1>{{getPost.title}}</h1>
-            <v-spacer />
             <v-btn @click="handleToggleLike" large icon v-if="user">
-              <v-icon large :color="checkIfPostLiked(getPost._id) ? 'red' : 'grey'">favorites</v-icon>
+              <v-icon large :color="checkIfPostLiked(getPost._id) ? 'red' : 'grey'">favorite</v-icon>
             </v-btn>
             <h3 class="ml-3 font-weight-thin">{{getPost.likes}} LIKES</h3>
             <v-spacer />
             <v-icon @click="goToPreviousPage" color="info" large>arrow_back</v-icon>
           </v-card-title>
+
           <v-tooltip right>
             <template v-slot:activator="{ on }">
               <v-img @click="toggleImageDialog" :src="getPost.imageUrl" id="post__image" v-on="on"></v-img>

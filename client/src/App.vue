@@ -35,6 +35,8 @@
 
       <!--Search Input -->
       <v-text-field
+        v-model="searchTerm"
+        @input="handleSearchPosts"
         flex
         prepend-icon="mdi-magnify"
         placeholder="Search Posts"
@@ -43,6 +45,16 @@
         hide-details
       >Search Posts</v-text-field>
       <v-spacer />
+
+      <!--Search Results Card -->
+      <v-card dark v-if="searchResults.length" id="search__card">
+        <v-list-item v-for="result in searchResults" :key="result._id">
+          <v-list-item-title>
+            {{result.title}}
+            <span class="font-weight-thin">{{result.description}}</span>
+          </v-list-item-title>
+        </v-list-item>
+      </v-card>
 
       <!--Horizontal Navbar Links-->
       <v-toolbar-items class="hidden-xs-only">
@@ -113,10 +125,16 @@ export default {
       sideNav: false,
       authSnackbar: false,
       authErrorSnackbar: false,
-      badgeAnimated: false
+      badgeAnimated: false,
+      searchTerm: ""
     };
   },
   methods: {
+    handleSearchPosts() {
+      this.$store.dispatch("searchPosts", {
+        searchTerm: this.searchTerm
+      });
+    },
     toggleSideNav() {
       this.sideNav = !this.sideNav;
     },
@@ -146,7 +164,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(["authError", "user", "userFavorites"]),
+    ...mapGetters(["authError", "user", "userFavorites", "searchResults"]),
     horizontalNavItems() {
       let items = [
         { icon: "chat", title: "Posts", link: "/posts" },
@@ -215,5 +233,13 @@ export default {
   90% {
     transform: translate3d(0, -4px, 0);
   }
+}
+/*Search Results Card*/
+#search__card {
+  position: absolute;
+  width: 100vw;
+  z-index: 1;
+  top: 100%;
+  left: 0%;
 }
 </style>
