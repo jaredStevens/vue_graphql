@@ -12,14 +12,14 @@ Vue.component('FormAlert', FormAlert)
 Vue.use(VueApollo);
 
 export const defaultClient = new ApolloClient({
-  uri: 'http://localhost:3000/graphql',
+  uri: 'https://vueshare-jbs.herokuapp.com/graphql',
   // include auth token with requests made to backend
   fetchOptions: {
     credentials: 'include'
   },
   request: operation => {
     //if no token with key of 'token' in localStorage, add it
-    if(!localStorage.token) {
+    if (!localStorage.token) {
       localStorage.setItem('token', '')
     }
     //operation adds the token to the authorization header, which is sent to the backend
@@ -29,14 +29,14 @@ export const defaultClient = new ApolloClient({
       }
     })
   },
-  onError: ({ graphQLErrors, networkError}) => {
-    if(networkError) {
+  onError: ({ graphQLErrors, networkError }) => {
+    if (networkError) {
       console.log('[networkError]', networkError)
     }
-    if(graphQLErrors) {
+    if (graphQLErrors) {
       for (let err of graphQLErrors) {
         console.dir(err)
-        if(err.name === "AuthenticationError") {
+        if (err.name === "AuthenticationError") {
           //set auth error in state (to show snackbar)
           store.commit('setAuthError', err)
           //signout user (to clear token)

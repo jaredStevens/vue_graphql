@@ -5,11 +5,14 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "test:e2e": "vue-cli-service test:e2e"
+    "test:e2e": "vue-cli-service test:e2e",
+    "now-build": "npm run build"
   },
   "dependencies": {
     "apollo-boost": "^0.4.4",
     "core-js": "^2.6.5",
+    "graphql": "^14.5.4",
+    "graphql-tag": "^2.10.1",
     "moment": "^2.24.0",
     "vue": "^2.6.10",
     "vue-apollo": "^3.0.0-rc.2",
