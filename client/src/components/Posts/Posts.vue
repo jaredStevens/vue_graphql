@@ -5,7 +5,7 @@
       <v-flex xs12 sm6 v-for="post in infiniteScrollPosts.posts" :key="post._id">
         <v-card hover>
           <v-responsive @click.native="goToPost(post._id)">
-            <v-img  :src="post.imageUrl" height="30vh" lazy></v-img>
+            <v-img :src="post.imageUrl" height="30vh" lazy></v-img>
           </v-responsive>
           <v-card-actions>
             <v-card-title primary>
@@ -14,7 +14,7 @@
                 <span class="grey--text">{{post.likes}} likes - {{post.messages.length}} comments</span>
               </div>
             </v-card-title>
-            <v-spacer/>
+            <v-spacer />
             <v-btn icon @click="showPostCreator = !showPostCreator">
               <v-icon>{{`keyboard_arrow_${showPostCreator ? 'up' : 'down'}`}}</v-icon>
             </v-btn>
@@ -25,16 +25,18 @@
             <v-card-text v-show="showPostCreator" class="grey lighten-4">
               <v-list-item>
                 <v-list-item-avatar>
-                  <img :src="post.createdBy.avatar"/>
+                  <img :src="post.createdBy.avatar" />
                 </v-list-item-avatar>
                 <v-list-item-content>
                   <v-list-item-title class="text--primary">{{post.createdBy.username}}</v-list-item-title>
-                  <v-list-item-subtitle class="font-weight-thin">Added {{post.createdDate}}</v-list-item-subtitle>
+                  <v-list-item-subtitle
+                    class="font-weight-thin"
+                  >Added {{formatCreatedDate(post.createdDate)}}</v-list-item-subtitle>
                 </v-list-item-content>
                 <v-list-item-action>
                   <v-btn icon ripple>
                     <v-icon color="grey lighten-1">info</v-icon>
-                    </v-btn>
+                  </v-btn>
                 </v-list-item-action>
               </v-list-item>
             </v-card-text>
@@ -55,18 +57,19 @@
 </template>
 
 <script>
-import { INFINITE_SCROLL_POSTS } from '../../queries'
+import moment from "moment";
+import { INFINITE_SCROLL_POSTS } from "../../queries";
 
 const pageSize = 2;
 
 export default {
-  name: 'Posts',
+  name: "Posts",
   data() {
     return {
       pageNum: 1,
-      showMoreEnabled: true,
+      // showMoreEnabled: true,
       showPostCreator: false
-    }
+    };
   },
   apollo: {
     infiniteScrollPosts: {
@@ -77,7 +80,15 @@ export default {
       }
     }
   },
+  computed: {
+    showMoreEnabled() {
+      return this.infiniteScrollPosts && this.infiniteScrollPosts.hasMore;
+    }
+  },
   methods: {
+    formatCreatedDate(date) {
+      return moment(new Date(date)).format("ll");
+    },
     showMorePosts() {
       this.pageNum += 1;
       //fetch more data and transfrom original result
@@ -87,31 +98,28 @@ export default {
           pageNum: this.pageNum,
           pageSize
         },
-        updateQuery: ( prevResult, { fetchMoreResult }) => {
-          console.log('prevResult', prevResult.infiniteScrollPosts.posts)
-          console.log('fetch more result', fetchMoreResult)
+        updateQuery: (prevResult, { fetchMoreResult }) => {
+          console.log("prevResult", prevResult.infiniteScrollPosts.posts);
+          console.log("fetch more result", fetchMoreResult);
 
           const newPosts = fetchMoreResult.infiniteScrollPosts.posts;
           const hasMore = fetchMoreResult.infiniteScrollPosts.hasMore;
-          this.showMoreEnabled = hasMore;
+          // this.showMoreEnabled = hasMore;
 
           return {
             infiniteScrollPosts: {
               __typename: prevResult.infiniteScrollPosts.__typename,
               //merge previous posts with new posts
-              posts: [
-                ...prevResult.infiniteScrollPosts.posts,
-                ...newPosts
-              ],
+              posts: [...prevResult.infiniteScrollPosts.posts, ...newPosts],
               hasMore
             }
-          }
+          };
         }
-      })
+      });
     },
     goToPost(postId) {
-      this.$router.push(`/posts/${postId}`)
+      this.$router.push(`/posts/${postId}`);
     }
   }
-}
+};
 </script>

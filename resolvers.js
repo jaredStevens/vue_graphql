@@ -15,6 +15,12 @@ module.exports = {
       });
       return posts
     },
+    getUserPosts: async (_, { userId }, { Post }) => {
+      const posts = await Post.find({
+        createdBy: userId
+      });
+      return posts;
+    },
     getPost: async (_, { postId }, { Post }) => {
       const post = await Post.findOne({ _id: postId }).populate({
         path: 'messages.messageUser',
@@ -88,6 +94,19 @@ module.exports = {
         createdBy: creatorId
       }).save();
       return newPost;
+    },
+    deleteUserPost: async (_, { postId }, { Post }) => {
+      const post = await Post.findOneAndRemove({ _id: postId });
+      return post;
+    },
+    updateUserPost: async (_, { postId, userId, title, imageUrl, categories, description }, { Post }) => {
+      const post = await Post.findOneAndUpdate(
+        //Find post by postId and createdBy
+        { _id: postId, createdBy: userId },
+        { $set: { title, imageUrl, categories, description } },
+        { new: true }
+      )
+      return post;
     },
     addPostMessage: async (_, { messageBody, userId, postId }, { Post }) => {
       const newMessage = {

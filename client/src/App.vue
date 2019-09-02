@@ -17,6 +17,7 @@
           </v-list-item-action>
           <v-list-item-content>{{item.title}}</v-list-item-content>
         </v-list-item>
+
         <!-- Signout Button -->
         <v-list-item v-if="user" @click="handleSignoutUser">
           <v-list-item-action>
@@ -48,11 +49,21 @@
 
       <!--Search Results Card -->
       <v-card dark v-if="searchResults.length" id="search__card">
-        <v-list-item v-for="result in searchResults" :key="result._id">
+        <v-list-item
+          v-for="result in searchResults"
+          :key="result._id"
+          @click="goToSearchResult(result._id)"
+        >
           <v-list-item-title>
-            {{result.title}}
-            <span class="font-weight-thin">{{result.description}}</span>
+            {{result.title}} -
+            <span
+              class="font-weight-thin"
+            >{{formatDescription(result.description)}}</span>
           </v-list-item-title>
+          <!-- Show Icon if result is favorited by the user -->
+          <v-list-item-action v-if="checkIfUserFavorite(result._id)">
+            <v-icon>favorite</v-icon>
+          </v-list-item-action>
         </v-list-item>
       </v-card>
 
@@ -130,6 +141,22 @@ export default {
     };
   },
   methods: {
+    checkIfUserFavorite(resultId) {
+      return (
+        this.userFavorites &&
+        this.userFavorites.some(fave => fave._id === resultId)
+      );
+    },
+    formatDescription(desc) {
+      return desc.length > 30 ? `${desc.slice(0, 30)}...` : desc;
+    },
+    goToSearchResult(resultId) {
+      //clear search term
+      this.searchTerm = "";
+      //Go to  desired result
+      this.$router.push(`/posts/${resultId}`);
+      this.$store.commit("clearSearchResults");
+    },
     handleSearchPosts() {
       this.$store.dispatch("searchPosts", {
         searchTerm: this.searchTerm
@@ -196,6 +223,16 @@ export default {
 </script>
 
 <style scoped>
+h1 {
+  font-weight: 400;
+  font-size: 2.5rem;
+}
+
+h2 {
+  font-weight: 400;
+  font-size: 2rem;
+}
+
 .fade-enter-active,
 .fade-leave-active {
   transition-property: opacity;
